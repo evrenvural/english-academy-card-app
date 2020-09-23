@@ -15,19 +15,22 @@ class TextProgressLinearIndicator extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(30),
-          child: LinearProgressIndicator(
-            minHeight: MySize.percentHeight(context, 0.015),
-            backgroundColor: MyColors.WHITE3,
-            valueColor: AlwaysStoppedAnimation<Color>(
-                valueColor != null ? valueColor : MyColors.BLUE),
-          ),
-        ),
-        SizedBox(height: 13),
+            borderRadius: BorderRadius.circular(30),
+            child: buildLinearProgressIndicator(context)),
+        SizedBox(height: MySize.percentHeight(context, 0.02)),
         showText == null || showText
             ? Text("10/20", style: Theme.of(context).textTheme.bodyText1)
             : Container(),
       ],
+    );
+  }
+
+  LinearProgressIndicator buildLinearProgressIndicator(BuildContext context) {
+    return LinearProgressIndicator(
+      minHeight: MySize.percentHeight(context, 0.015),
+      backgroundColor: MyColors.WHITE3,
+      valueColor: AlwaysStoppedAnimation<Color>(
+          valueColor != null ? valueColor : MyColors.BLUE),
     );
   }
 }

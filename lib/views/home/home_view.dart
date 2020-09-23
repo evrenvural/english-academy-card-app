@@ -16,7 +16,8 @@ class HomeView extends HomeViewModel {
             microseconds: 900,
           ),
           child: buildRow()),
-      floatingActionButton: buildFloatingActionButton(),
+      floatingActionButton:
+          !isOpenKeyboard ? buildFloatingActionButton() : null,
     );
   }
 
@@ -37,9 +38,11 @@ class HomeView extends HomeViewModel {
   Column buildColumn() {
     return Column(
       children: [
-        Flexible(flex: topFlex, child: buildProgressIndicator()),
+        !isOpenKeyboard
+            ? Flexible(flex: 3, child: buildProgressIndicator())
+            : Container(),
         Flexible(flex: 6, child: buildCard()),
-        Spacer(flex: 3)
+        !isOpenKeyboard ? Spacer(flex: 3) : Container()
       ],
     );
   }

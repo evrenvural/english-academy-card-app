@@ -1,24 +1,43 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import './home.dart';
 
 abstract class HomeViewModel extends State<Home> {
-  GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
+  final cardKey = GlobalKey<FlipCardState>();
+  final keyboardVisibility = KeyboardVisibilityNotification();
 
-  // States
-  int topFlex = 3;
+  int keyboardSubscriberId;
+
+  // state
+  bool isOpenKeyboard = false;
+
+  @override
+  void initState() {
+    keyboardSubscriberId = keyboardVisibility.addNewListener(
+      onChange: onKeyboardVisualChange,
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    keyboardVisibility.removeListener(keyboardSubscriberId);
+    super.dispose();
+  }
+
+  // listened Function
+  void onKeyboardVisualChange(bool visible) {
+    setState(() {
+      isOpenKeyboard = visible;
+    });
+  }
 
   void turnCard() {
     if (cardKey.currentState.isFront) {
       cardKey.currentState.toggleCard();
-      setState(() {
-        topFlex = 3;
-      });
     } else {
       cardKey.currentState.toggleCard();
-      setState(() {
-        topFlex = 3;
-      });
     }
   }
 
