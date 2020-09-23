@@ -30,7 +30,7 @@ final myTheme = ThemeData(
     ),
     bodyText2: TextStyle(
       color: MyColors.BLUE,
-      fontSize: 16.0,
+      fontSize: 12.0,
     ),
   ),
   floatingActionButtonTheme: FloatingActionButtonThemeData(

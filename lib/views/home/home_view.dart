@@ -1,9 +1,9 @@
+import 'package:english_academy/components/text_progress_linear_indicator.dart';
+import 'package:english_academy/helpers/my_size.dart';
+import 'package:flutter/material.dart';
 import 'package:english_academy/components/cards/input_card.dart';
 import 'package:english_academy/components/cards/text_card.dart';
-import 'package:english_academy/helpers/my_size.dart';
-import 'package:english_academy/init/theme.dart';
-import 'package:flip_card/flip_card.dart';
-import 'package:flutter/material.dart';
+import 'package:english_academy/components/core/my_flip_card.dart';
 import './home_view_model.dart';
 
 class HomeView extends HomeViewModel {
@@ -11,28 +11,12 @@ class HomeView extends HomeViewModel {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      body: buildColumn(),
+      body: AnimatedContainer(
+          duration: Duration(
+            microseconds: 900,
+          ),
+          child: buildRow()),
       floatingActionButton: buildFloatingActionButton(),
-    );
-  }
-
-  Column buildColumn() {
-    return Column(
-      children: [
-        Flexible(flex: 3, child: Placeholder()),
-        Flexible(flex: 6, child: buildRow()),
-        Spacer(flex: 3)
-      ],
-    );
-  }
-
-  Row buildRow() {
-    return Row(
-      children: [
-        Spacer(flex: 1),
-        Flexible(flex: 10, child: buildCard()),
-        Spacer(flex: 1),
-      ],
     );
   }
 
@@ -40,25 +24,45 @@ class HomeView extends HomeViewModel {
     return AppBar(title: Text("Günlük Kartlar"));
   }
 
-  Card buildCard() {
-    return Card(
-      elevation: 0.0,
-      color: MyColors.PURPLE,
-      child: FlipCard(
-        key: cardKey,
-        flipOnTouch: false,
-        front: GestureDetector(
-          onDoubleTap: () {
-            cardKey.currentState.toggleCard();
-          },
-          child: TextCard(text: "Accurate"),
-        ),
-        back: GestureDetector(
-          onDoubleTap: () {
-            cardKey.currentState.toggleCard();
-          },
-          child: InputCard(),
-        ),
+  Row buildRow() {
+    return Row(
+      children: [
+        Spacer(flex: 1),
+        Flexible(flex: 10, child: buildColumn()),
+        Spacer(flex: 1),
+      ],
+    );
+  }
+
+  Column buildColumn() {
+    return Column(
+      children: [
+        Flexible(flex: topFlex, child: buildProgressIndicator()),
+        Flexible(flex: 6, child: buildCard()),
+        Spacer(flex: 3)
+      ],
+    );
+  }
+
+  Padding buildProgressIndicator() {
+    return Padding(
+      padding: EdgeInsets.all(MySize.percentWidth(context, 0.07)),
+      child: TextProgressLinearIndicator(
+        showText: true,
+      ),
+    );
+  }
+
+  MyFlipCard buildCard() {
+    return MyFlipCard(
+      cardKey: cardKey,
+      frontCard: GestureDetector(
+        onDoubleTap: turnCard,
+        child: TextCard(text: "Accurate"),
+      ),
+      backCard: GestureDetector(
+        onDoubleTap: turnCard,
+        child: InputCard(onSubmit: handleSubmit),
       ),
     );
   }
