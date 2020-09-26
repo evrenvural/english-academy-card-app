@@ -1,3 +1,4 @@
+import 'package:english_academy/services/card_service.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
@@ -26,7 +27,7 @@ abstract class HomeViewModel extends State<Home> {
     super.dispose();
   }
 
-  // listened Function
+  // listened function
   void onKeyboardVisualChange(bool visible) {
     setState(() {
       isOpenKeyboard = visible;
@@ -34,14 +35,11 @@ abstract class HomeViewModel extends State<Home> {
   }
 
   void turnCard() {
-    if (cardKey.currentState.isFront) {
-      cardKey.currentState.toggleCard();
-    } else {
-      cardKey.currentState.toggleCard();
-    }
+    cardKey.currentState.toggleCard();
   }
 
   void handleSubmit(String inputValue) {
     print(inputValue);
+    turnCard();
   }
 }

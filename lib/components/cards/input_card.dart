@@ -1,8 +1,9 @@
-import 'package:english_academy/components/core/my_card.dart';
-import 'package:english_academy/components/core/my_raised_button.dart';
-import 'package:english_academy/helpers/my_size.dart';
-import 'package:english_academy/init/theme.dart';
 import 'package:flutter/material.dart';
+
+import '../../helpers/my_size.dart';
+import '../../init/theme.dart';
+import '../core/my_card.dart';
+import '../core/my_raised_button.dart';
 
 class InputCard extends StatefulWidget {
   const InputCard({Key key, @required this.onSubmit}) : super(key: key);

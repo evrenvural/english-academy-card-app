@@ -1,13 +1,22 @@
-import 'package:english_academy/helpers/my_size.dart';
-import 'package:english_academy/init/theme.dart';
 import 'package:flutter/material.dart';
 
+import '../helpers/extensions/widget_extension.dart';
+import '../helpers/my_size.dart';
+import '../init/theme.dart';
+
 class TextProgressLinearIndicator extends StatelessWidget {
-  const TextProgressLinearIndicator({Key key, this.valueColor, this.showText})
+  const TextProgressLinearIndicator(
+      {Key key,
+      this.valueColor,
+      this.showText,
+      @required this.value,
+      @required this.fullValue})
       : super(key: key);
 
   final Color valueColor;
   final bool showText;
+  final int value;
+  final int fullValue;
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +27,8 @@ class TextProgressLinearIndicator extends StatelessWidget {
             borderRadius: BorderRadius.circular(30),
             child: buildLinearProgressIndicator(context)),
         SizedBox(height: MySize.percentHeight(context, 0.02)),
-        showText == null || showText
-            ? Text("10/20", style: Theme.of(context).textTheme.bodyText1)
-            : Container(),
+        Text("$value/$fullValue", style: Theme.of(context).textTheme.bodyText1)
+            .doesRender(showText == null || showText)
       ],
     );
   }
@@ -31,6 +39,7 @@ class TextProgressLinearIndicator extends StatelessWidget {
       backgroundColor: MyColors.WHITE3,
       valueColor: AlwaysStoppedAnimation<Color>(
           valueColor != null ? valueColor : MyColors.BLUE),
+      value: value / fullValue,
     );
   }
 }

@@ -1,6 +1,7 @@
-import 'package:english_academy/init/theme.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
+
+import '../../init/theme.dart';
 
 class MyFlipCard extends StatelessWidget {
   const MyFlipCard(

@@ -1,6 +1,7 @@
-import 'package:english_academy/helpers/my_size.dart';
-import 'package:english_academy/init/theme.dart';
 import 'package:flutter/material.dart';
+
+import '../../helpers/my_size.dart';
+import '../../init/theme.dart';
 
 class MyCard extends StatelessWidget {
   const MyCard({Key key, @required this.child}) : super(key: key);

@@ -1,10 +1,12 @@
-import 'package:english_academy/components/text_progress_linear_indicator.dart';
-import 'package:english_academy/helpers/my_size.dart';
 import 'package:flutter/material.dart';
-import 'package:english_academy/components/cards/input_card.dart';
-import 'package:english_academy/components/cards/text_card.dart';
-import 'package:english_academy/components/core/my_flip_card.dart';
+
 import './home_view_model.dart';
+import '../../components/cards/input_card.dart';
+import '../../components/cards/text_card.dart';
+import '../../components/core/my_flip_card.dart';
+import '../../components/text_progress_linear_indicator.dart';
+import '../../helpers/extensions/widget_extension.dart';
+import '../../helpers/my_size.dart';
 
 class HomeView extends HomeViewModel {
   @override
@@ -17,7 +19,7 @@ class HomeView extends HomeViewModel {
           ),
           child: buildRow()),
       floatingActionButton:
-          !isOpenKeyboard ? buildFloatingActionButton() : null,
+          buildFloatingActionButton().doesRender(!isOpenKeyboard),
     );
   }
 
@@ -38,11 +40,10 @@ class HomeView extends HomeViewModel {
   Column buildColumn() {
     return Column(
       children: [
-        !isOpenKeyboard
-            ? Flexible(flex: 3, child: buildProgressIndicator())
-            : Container(),
+        Flexible(flex: 3, child: buildProgressIndicator())
+            .doesRender(!isOpenKeyboard),
         Flexible(flex: 6, child: buildCard()),
-        !isOpenKeyboard ? Spacer(flex: 3) : Container()
+        Spacer(flex: 3).doesRender(!isOpenKeyboard)
       ],
     );
   }
@@ -52,6 +53,8 @@ class HomeView extends HomeViewModel {
       padding: EdgeInsets.all(MySize.percentWidth(context, 0.07)),
       child: TextProgressLinearIndicator(
         showText: true,
+        fullValue: 10,
+        value: 5,
       ),
     );
   }

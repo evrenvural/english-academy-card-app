@@ -1,7 +1,8 @@
-import 'package:english_academy/components/core/my_card.dart';
-import 'package:english_academy/helpers/my_size.dart';
-import 'package:english_academy/init/theme.dart';
 import 'package:flutter/material.dart';
+
+import '../../helpers/my_size.dart';
+import '../../init/theme.dart';
+import '../core/my_card.dart';
 
 class TextCard extends StatelessWidget {
   const TextCard({Key key, @required this.text, this.isResponseTrue})
