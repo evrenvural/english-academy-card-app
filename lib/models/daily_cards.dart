@@ -1,17 +1,17 @@
-import 'package:english_academy/models/card.dart';
+import 'card_model.dart';
 
 class DailyCards {
   String date;
-  List<Card> cards;
+  List<CardModel> cards;
 
   DailyCards({this.date, this.cards});
 
   DailyCards.fromJson(Map<String, dynamic> json) {
     date = json['date'];
     if (json['cards'] != null) {
-      cards = new List<Card>();
+      cards = new List<CardModel>();
       json['cards'].forEach((v) {
-        cards.add(new Card.fromJson(v));
+        cards.add(new CardModel.fromJson(v));
       });
     }
   }

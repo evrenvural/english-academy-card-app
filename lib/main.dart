@@ -1,8 +1,9 @@
-import 'package:english_academy/controller/card_controller.dart';
-import 'package:english_academy/models/daily_card.dart';
-import 'package:english_academy/services/card_service.dart';
+import 'package:english_academy/helpers/action_state.dart';
+import 'package:english_academy/views/error_wiev.dart';
+import 'package:english_academy/views/loading_view.dart';
 import 'package:flutter/material.dart';
 
+import 'controller/card_controller.dart';
 import 'init/theme.dart';
 import 'views/home/home.dart';
 
@@ -14,10 +15,27 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  void controlDailyCards() {
-    CardController.getInstance().then((instance) {
-      print(instance.checkDailyCardsAreNew().toString());
-    });
+  ActionState viewState = ActionState.IS_LOADING;
+
+  void controlDailyCards() async {
+    var cardController = await CardController.getInstance();
+    await cardController.fetchTodayDailyCardsFromService();
+    if (cardController.checkDailyCardsAreNew()) {
+      bool isSaved = await cardController.saveDailyCardsToLocaleDatabase();
+      if (isSaved) {
+        setState(() {
+          viewState = ActionState.DONE;
+        });
+      } else {
+        setState(() {
+          viewState = ActionState.ERROR;
+        });
+      }
+    } else {
+      setState(() {
+        viewState = ActionState.DONE;
+      });
+    }
   }
 
   @override
@@ -31,7 +49,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       theme: myTheme,
       title: 'İngilizce Dili Akademisi',
-      home: Home(),
+      home: viewState == ActionState.DONE
+          ? Home()
+          : viewState == ActionState.IS_LOADING ? LoadingView() : ErrorView(),
     );
   }
 }

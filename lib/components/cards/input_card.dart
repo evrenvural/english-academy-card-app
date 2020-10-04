@@ -31,7 +31,8 @@ class _InputCardState extends State<InputCard> {
   MyCard build(BuildContext context) {
     return MyCard(
       child: Stack(
-          children: [buildInputContainer(context), buildSubmitButton(context)]),
+        children: [buildInputContainer(context), buildSubmitButton(context)],
+      ),
     );
   }
 

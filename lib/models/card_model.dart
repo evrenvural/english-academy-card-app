@@ -1,18 +1,21 @@
-class Card {
+class CardModel {
   String eng;
   String tur;
+  bool response;
 
-  Card({this.eng, this.tur});
+  CardModel({this.eng, this.tur, this.response});
 
-  Card.fromJson(Map<String, dynamic> json) {
+  CardModel.fromJson(Map<String, dynamic> json) {
     eng = json['eng'];
     tur = json['tur'];
+    response = json['response'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['eng'] = this.eng;
     data['tur'] = this.tur;
+    data['response'] = this.response;
     return data;
   }
 }

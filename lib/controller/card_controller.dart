@@ -1,33 +1,46 @@
-import 'package:english_academy/models/daily_card.dart';
-import 'package:english_academy/models/responsed_daily_cards.dart';
-import 'package:english_academy/services/card_locale_service.dart';
-import 'package:english_academy/services/card_service.dart';
+import '../models/daily_cards.dart';
+import '../services/card_locale_service.dart';
+import '../services/card_service.dart';
 
 class CardController {
   static CardController _instance;
   static CardLocaleService _cardLocaleService;
+  static CardService _cardService;
 
   static Future<CardController> getInstance() async {
     if (_instance == null) {
-      _instance = CardController._init();
       _cardLocaleService = await CardLocaleService.getInstance();
+      _cardService = CardService.getInstance();
+      _instance = CardController._();
     }
     return _instance;
   }
 
-  CardController._init();
+  CardController._();
 
-  Future<bool> checkDailyCardsAreNew() async {
-    DailyCards dailyCards = await CardService.getDailyCards();
-    List<ResponsedDailyCards> responsedCards =
-        _cardLocaleService.getAllResponsedDailyCards();
+  // Variables
+  DailyCards _dailyCards;
 
-    for (var responsedCard in responsedCards) {
-      if (dailyCards.date == responsedCard.date) {
-        return false;
-      }
-    }
+  // Functions
+  Future<void> fetchTodayDailyCardsFromService() async {
+    _dailyCards = await _cardService.getDailyCards();
+  }
 
-    return true;
+  bool checkDailyCardsAreNew() {
+    var localeDailyCards = _cardLocaleService.getDailyCards();
+    return localeDailyCards == null ||
+        _dailyCards.date != localeDailyCards.date;
+  }
+
+  Future<bool> saveDailyCardsToLocaleDatabase() {
+    return _cardLocaleService.setNewDailyCards(_dailyCards);
+  }
+
+  DailyCards getDailyCardsFromLocale() {
+    return _cardLocaleService.getDailyCards();
+  }
+
+  Future<bool> setDailyCardsToLocale(DailyCards dailyCards) {
+    return _cardLocaleService.setNewDailyCards(dailyCards);
   }
 }

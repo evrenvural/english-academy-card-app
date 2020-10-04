@@ -1,15 +1,22 @@
+import 'package:english_academy/components/core/my_raised_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../helpers/my_size.dart';
 import '../../init/theme.dart';
 import '../core/my_card.dart';
+import '../../helpers/extensions/widget_extension.dart';
 
 class TextCard extends StatelessWidget {
-  const TextCard({Key key, @required this.text, this.isResponseTrue})
+  const TextCard(
+      {Key key,
+      @required this.text,
+      this.isResponseTrue,
+      this.onPressedNextButon})
       : super(key: key);
 
   final String text;
   final bool isResponseTrue;
+  final VoidCallback onPressedNextButon;
 
   @override
   MyCard build(BuildContext context) {
@@ -17,6 +24,7 @@ class TextCard extends StatelessWidget {
       child: Stack(children: [
         buildResponseIconContainer(context),
         buildText(context),
+        buildNextButton(context).doesRender(isResponseTrue != null)
       ]),
     );
   }
@@ -41,6 +49,17 @@ class TextCard extends StatelessWidget {
       child: Text(
         text,
         style: Theme.of(context).textTheme.headline1,
+      ),
+    );
+  }
+
+  Positioned buildNextButton(BuildContext context) {
+    return Positioned(
+      right: MySize.percentWidth(context, 0.04),
+      bottom: MySize.percentHeight(context, 0.02),
+      child: MyRaisedButton(
+        onPressed: onPressedNextButon,
+        child: Text("Sonraki"),
       ),
     );
   }

@@ -53,8 +53,12 @@ class HomeView extends HomeViewModel {
       padding: EdgeInsets.all(MySize.percentWidth(context, 0.07)),
       child: TextProgressLinearIndicator(
         showText: true,
-        fullValue: 10,
-        value: 5,
+        fullValue: dailyCards != null ? dailyCards.cards.length : 10,
+        value: dailyCards != null
+            ? dailyCards.cards
+                .where((element) => element.response != null)
+                .length
+            : 0,
       ),
     );
   }
@@ -64,11 +68,21 @@ class HomeView extends HomeViewModel {
       cardKey: cardKey,
       frontCard: GestureDetector(
         onDoubleTap: turnCard,
-        child: TextCard(text: "Accurate"),
+        child: TextCard(
+          text: card != null ? card.eng : '...',
+          isResponseTrue: card?.response,
+          onPressedNextButon: nextCard,
+        ),
       ),
       backCard: GestureDetector(
         onDoubleTap: turnCard,
-        child: InputCard(onSubmit: handleSubmit),
+        child: card?.response == null
+            ? InputCard(onSubmit: handleSubmit)
+            : TextCard(
+                text: card != null ? card.tur : '...',
+                isResponseTrue: card?.response,
+                onPressedNextButon: nextCard,
+              ),
       ),
     );
   }
