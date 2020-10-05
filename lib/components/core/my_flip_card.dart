@@ -1,3 +1,4 @@
+import 'package:english_academy/helpers/my_size.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 
@@ -17,14 +18,17 @@ class MyFlipCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0.0,
-      color: MyColors.PURPLE,
-      child: FlipCard(
-        key: cardKey,
-        flipOnTouch: false,
-        front: frontCard,
-        back: backCard,
+    return Container(
+      width: MySize.percentWidth(context, 0.8),
+      child: Card(
+        elevation: 0.0,
+        color: MyColors.PURPLE,
+        child: FlipCard(
+          key: cardKey,
+          flipOnTouch: false,
+          front: frontCard,
+          back: backCard,
+        ),
       ),
     );
   }

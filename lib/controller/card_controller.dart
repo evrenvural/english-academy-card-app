@@ -1,3 +1,5 @@
+import 'package:english_academy/models/card_model.dart';
+
 import '../models/daily_cards.dart';
 import '../services/card_locale_service.dart';
 import '../services/card_service.dart';
@@ -42,5 +44,17 @@ class CardController {
 
   Future<bool> setDailyCardsToLocale(DailyCards dailyCards) {
     return _cardLocaleService.setNewDailyCards(dailyCards);
+  }
+
+  Future<bool> saveOldDailyCardsToAllCards(DailyCards dailyCards) {
+    List<CardModel> allCards = _cardLocaleService.getAllCards();
+    for (var card in dailyCards.cards) {
+      allCards.add(card);
+    }
+    return _cardLocaleService.setAllCards(allCards);
+  }
+
+  List<CardModel> getAllCardsFromLocale() {
+    return _cardLocaleService.getAllCards();
   }
 }

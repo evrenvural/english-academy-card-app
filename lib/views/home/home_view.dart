@@ -42,7 +42,13 @@ class HomeView extends HomeViewModel {
       children: [
         Flexible(flex: 3, child: buildProgressIndicator())
             .doesRender(!isOpenKeyboard),
-        Flexible(flex: 6, child: buildCard()),
+        Flexible(
+            flex: 6,
+            child: !isCardOver
+                ? buildCard()
+                : Center(
+                    child: Text("Bitti"),
+                  )),
         Spacer(flex: 3).doesRender(!isOpenKeyboard)
       ],
     );
@@ -89,7 +95,7 @@ class HomeView extends HomeViewModel {
 
   FloatingActionButton buildFloatingActionButton() {
     return FloatingActionButton(
-      onPressed: () {},
+      onPressed: pressFloatingActionButton,
       child: Icon(Icons.collections_bookmark),
     );
   }

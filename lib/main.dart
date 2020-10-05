@@ -1,4 +1,6 @@
 import 'package:english_academy/helpers/action_state.dart';
+import 'package:english_academy/helpers/view_names.dart';
+import 'package:english_academy/views/all_cards/all_cards.dart';
 import 'package:english_academy/views/error_wiev.dart';
 import 'package:english_academy/views/loading_view.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,17 @@ class _MyAppState extends State<MyApp> {
     var cardController = await CardController.getInstance();
     await cardController.fetchTodayDailyCardsFromService();
     if (cardController.checkDailyCardsAreNew()) {
+      var oldDailyCards = cardController.getDailyCardsFromLocale();
+      if (oldDailyCards != null) {
+        bool isSaved =
+            await cardController.saveOldDailyCardsToAllCards(oldDailyCards);
+        if (!isSaved) {
+          setState(() {
+            viewState = ActionState.ERROR;
+            return;
+          });
+        }
+      }
       bool isSaved = await cardController.saveDailyCardsToLocaleDatabase();
       if (isSaved) {
         setState(() {
@@ -47,11 +60,14 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: myTheme,
-      title: 'İngilizce Dili Akademisi',
-      home: viewState == ActionState.DONE
-          ? Home()
-          : viewState == ActionState.IS_LOADING ? LoadingView() : ErrorView(),
-    );
+        theme: myTheme,
+        title: 'İngilizce Dili Akademisi',
+        home: viewState == ActionState.DONE
+            ? Home()
+            : viewState == ActionState.IS_LOADING ? LoadingView() : ErrorView(),
+        routes: {
+          ViewNames.HOME: (context) => Home(),
+          ViewNames.ALL_CARDS: (context) => AllCards(),
+        });
   }
 }

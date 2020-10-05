@@ -1,4 +1,5 @@
 import 'package:english_academy/controller/card_controller.dart';
+import 'package:english_academy/helpers/view_names.dart';
 import 'package:english_academy/models/daily_cards.dart';
 import 'package:english_academy/models/card_model.dart';
 import 'package:flip_card/flip_card.dart';
@@ -18,6 +19,7 @@ abstract class HomeViewModel extends State<Home> {
   bool isOpenKeyboard = false;
   DailyCards dailyCards;
   CardModel card;
+  bool isCardOver = false;
 
   @override
   void initState() {
@@ -36,10 +38,21 @@ abstract class HomeViewModel extends State<Home> {
 
   void fetchDailyCards() async {
     cardController = await CardController.getInstance();
-    setState(() {
-      dailyCards = cardController.getDailyCardsFromLocale();
-      card = dailyCards.cards.firstWhere((element) => element.response == null);
-    });
+    CardModel notResponsedCard;
+    try {
+      notResponsedCard =
+          dailyCards.cards.firstWhere((element) => element.response == null);
+      setState(() {
+        dailyCards = cardController.getDailyCardsFromLocale();
+        card = notResponsedCard;
+      });
+    } catch (e) {
+      setState(() {
+        dailyCards = cardController.getDailyCardsFromLocale();
+        card = null;
+        isCardOver = true;
+      });
+    }
   }
 
   // listened function
@@ -63,6 +76,7 @@ abstract class HomeViewModel extends State<Home> {
         card.response = false;
       });
     }
+    cardController.setDailyCardsToLocale(dailyCards);
     turnCard();
   }
 
@@ -73,9 +87,14 @@ abstract class HomeViewModel extends State<Home> {
       setState(() {
         card = nextCard;
       });
-      cardController.setDailyCardsToLocale(dailyCards);
     } catch (e) {
-      print("bitti");
+      setState(() {
+        isCardOver = true;
+      });
     }
+  }
+
+  void pressFloatingActionButton() {
+    Navigator.of(context).pushNamed(ViewNames.ALL_CARDS);
   }
 }

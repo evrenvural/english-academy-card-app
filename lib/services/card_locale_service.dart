@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:english_academy/models/card_model.dart';
 import 'package:english_academy/models/daily_cards.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String _ALL_RESPONSED_DAILY_CARDS = '/_ALL_RESPONSED_DAILY_CARDS';
+const String _ALL_CARDS = '/_ALL_CARDS';
 const String _DAILY_CARDS = '/_DAILY_CARDS';
 
 class CardLocaleService {
@@ -20,17 +21,21 @@ class CardLocaleService {
 
   CardLocaleService._init();
 
-  /* List<ResponsedDailyCards> getAllResponsedDailyCards() {
-    List<String> response =
-        _sharedPreferences.getStringList(_ALL_RESPONSED_DAILY_CARDS);
+  List<CardModel> getAllCards() {
+    List<String> response = _sharedPreferences.getStringList(_ALL_CARDS);
     if (response == null) {
-      return null;
+      return [];
     }
     return response
-        .map((jsonObject) =>
-            ResponsedDailyCards.fromJson(json.decode(jsonObject)))
+        .map((jsonObject) => CardModel.fromJson(json.decode(jsonObject)))
         .toList();
-  } */
+  }
+
+  Future<bool> setAllCards(List<CardModel> allCards) {
+    List<String> encodedCards =
+        allCards.map((card) => json.encode(card.toJson())).toList();
+    return _sharedPreferences.setStringList(_ALL_CARDS, encodedCards);
+  }
 
   Future<bool> setNewDailyCards(DailyCards dailyCards) {
     String encodedCards = json.encode(dailyCards.toJson());

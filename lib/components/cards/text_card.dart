@@ -11,20 +11,24 @@ class TextCard extends StatelessWidget {
       {Key key,
       @required this.text,
       this.isResponseTrue,
-      this.onPressedNextButon})
+      this.onPressedNextButon,
+      this.elevation})
       : super(key: key);
 
   final String text;
   final bool isResponseTrue;
   final VoidCallback onPressedNextButon;
+  final double elevation;
 
   @override
   MyCard build(BuildContext context) {
     return MyCard(
+      elevation: elevation,
       child: Stack(children: [
         buildResponseIconContainer(context),
         buildText(context),
-        buildNextButton(context).doesRender(isResponseTrue != null)
+        buildNextButton(context)
+            .doesRender(isResponseTrue != null && onPressedNextButon != null)
       ]),
     );
   }
