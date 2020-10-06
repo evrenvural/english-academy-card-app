@@ -69,7 +69,8 @@ abstract class HomeViewModel extends State<Home> {
   }
 
   void handleSubmit(String value) {
-    if (value == card.tur) {
+    var formattedValue = value.toLowerCase();
+    if (formattedValue == card.tur) {
       setState(() {
         card.response = true;
       });
