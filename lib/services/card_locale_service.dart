@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const String _ALL_CARDS = '/_ALL_CARDS';
 const String _DAILY_CARDS = '/_DAILY_CARDS';
+const String _DAILY_CARDS_SAVED_STATE = '/_DAILY_CARDS_SAVED_STATE';
 
 class CardLocaleService {
   static CardLocaleService _instance;
@@ -47,5 +48,15 @@ class CardLocaleService {
     return encodedCards != null
         ? DailyCards.fromJson(json.decode(encodedCards))
         : null;
+  }
+
+  Future<bool> setIsCardsSavedToAllCards(bool isSaved) {
+    return _sharedPreferences.setBool(_DAILY_CARDS_SAVED_STATE, isSaved);
+  }
+
+  bool isCardsSavedToAllCards() {
+    return _sharedPreferences.getBool(_DAILY_CARDS_SAVED_STATE) != null
+        ? _sharedPreferences.getBool(_DAILY_CARDS_SAVED_STATE)
+        : false;
   }
 }

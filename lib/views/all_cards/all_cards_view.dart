@@ -6,6 +6,7 @@ import 'package:english_academy/init/theme.dart';
 import 'package:english_academy/models/card_model.dart';
 import 'package:flutter/material.dart';
 import './all_cards_view_model.dart';
+import '../../helpers/extensions/widget_extension.dart';
 
 class AllCardsView extends AllCardsViewModel {
   @override
@@ -29,22 +30,17 @@ class AllCardsView extends AllCardsViewModel {
   Column buildColumn() {
     return Column(
       children: [
-        Flexible(flex: 3, child: buildProgressIndicator()),
+        Flexible(
+          flex: 3,
+          child: buildProgressIndicator().doesRender(allCards.length != 0),
+        ),
         Flexible(
           flex: 6,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: allCards.length != 0
-                ? [
-                    ...allCards.map(
-                      (card) => buildCard(
-                        card,
-                        allCards.indexOf(card),
-                      ),
-                    )
-                  ]
-                : [],
-          ),
+          child: allCards.length != 0
+              ? buildListView()
+              : TextCard(
+                  text: "Kayıtlı kart yok!",
+                ),
         ),
         Spacer(flex: 3)
       ],
@@ -57,11 +53,27 @@ class AllCardsView extends AllCardsViewModel {
       child: TextProgressLinearIndicator(
         showText: true,
         valueColor: MyColors.GREEN,
-        fullValue: allCards.length != 0 ? allCards.length : 10,
+        fullValue: allCards.length != 0 ? allCards.length : 0,
         value: allCards.length != 0
             ? allCards.where((element) => element.response == true).length
             : 0,
       ),
+    );
+  }
+
+  ListView buildListView() {
+    return ListView(
+      scrollDirection: Axis.horizontal,
+      children: allCards.length != 0
+          ? [
+              ...allCards.map(
+                (card) => buildCard(
+                  card,
+                  allCards.indexOf(card),
+                ),
+              )
+            ]
+          : [],
     );
   }
 

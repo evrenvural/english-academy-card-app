@@ -1,3 +1,4 @@
+import 'package:english_academy/init/theme.dart';
 import 'package:flutter/material.dart';
 
 import './home_view_model.dart';
@@ -12,6 +13,7 @@ class HomeView extends HomeViewModel {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: buildAppBar(),
       body: AnimatedContainer(
           duration: Duration(
@@ -43,12 +45,17 @@ class HomeView extends HomeViewModel {
         Flexible(flex: 3, child: buildProgressIndicator())
             .doesRender(!isOpenKeyboard),
         Flexible(
-            flex: 6,
-            child: !isCardOver
-                ? buildCard()
-                : Center(
-                    child: Text("Bitti"),
-                  )),
+          flex: 6,
+          child: !isCardOver
+              ? buildCard()
+              : Center(
+                  child: Icon(
+                    Icons.assignment_turned_in,
+                    color: Colors.green,
+                    size: MySize.percentWidth(context, 0.8),
+                  ),
+                ),
+        ),
         Spacer(flex: 3).doesRender(!isOpenKeyboard)
       ],
     );
@@ -96,7 +103,7 @@ class HomeView extends HomeViewModel {
   FloatingActionButton buildFloatingActionButton() {
     return FloatingActionButton(
       onPressed: pressFloatingActionButton,
-      child: Icon(Icons.collections_bookmark),
+      child: Icon(Icons.class_),
     );
   }
 }

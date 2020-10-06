@@ -9,6 +9,7 @@ import 'package:keyboard_visibility/keyboard_visibility.dart';
 import './home.dart';
 
 abstract class HomeViewModel extends State<Home> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   final cardKey = GlobalKey<FlipCardState>();
   final keyboardVisibility = KeyboardVisibilityNotification();
 
@@ -38,17 +39,18 @@ abstract class HomeViewModel extends State<Home> {
 
   void fetchDailyCards() async {
     cardController = await CardController.getInstance();
+    DailyCards todayDailyCards = cardController.getDailyCardsFromLocale();
     CardModel notResponsedCard;
     try {
-      notResponsedCard =
-          dailyCards.cards.firstWhere((element) => element.response == null);
+      notResponsedCard = todayDailyCards.cards
+          .firstWhere((element) => element.response == null);
       setState(() {
-        dailyCards = cardController.getDailyCardsFromLocale();
+        dailyCards = todayDailyCards;
         card = notResponsedCard;
       });
     } catch (e) {
       setState(() {
-        dailyCards = cardController.getDailyCardsFromLocale();
+        dailyCards = todayDailyCards;
         card = null;
         isCardOver = true;
       });
@@ -91,10 +93,18 @@ abstract class HomeViewModel extends State<Home> {
       setState(() {
         isCardOver = true;
       });
+      cardController.saveOldDailyCardsToAllCards(dailyCards);
+      cardController.setIsCardsSavedToAllCardsByView(true);
     }
   }
 
   void pressFloatingActionButton() {
-    Navigator.of(context).pushNamed(ViewNames.ALL_CARDS);
+    var allSavedCards = cardController.getAllCardsFromLocale();
+    if (allSavedCards.length != 0) {
+      Navigator.of(context).pushNamed(ViewNames.ALL_CARDS);
+    } else {
+      scaffoldKey.currentState.showSnackBar(
+          SnackBar(content: Text("Henüz tamamlanmış günlük kartınız yok.")));
+    }
   }
 }

@@ -21,19 +21,18 @@ class _MyAppState extends State<MyApp> {
 
   void controlDailyCards() async {
     var cardController = await CardController.getInstance();
+
     await cardController.fetchTodayDailyCardsFromService();
+
     if (cardController.checkDailyCardsAreNew()) {
-      var oldDailyCards = cardController.getDailyCardsFromLocale();
-      if (oldDailyCards != null) {
-        bool isSaved =
-            await cardController.saveOldDailyCardsToAllCards(oldDailyCards);
-        if (!isSaved) {
-          setState(() {
-            viewState = ActionState.ERROR;
-            return;
-          });
+      if (!cardController.isCardsSavedToAllCardsByView()) {
+        var dailyCards = cardController.getDailyCardsFromLocale();
+        if (dailyCards != null) {
+          cardController.saveOldDailyCardsToAllCards(dailyCards);
         }
       }
+      cardController.setIsCardsSavedToAllCardsByView(false);
+
       bool isSaved = await cardController.saveDailyCardsToLocaleDatabase();
       if (isSaved) {
         setState(() {

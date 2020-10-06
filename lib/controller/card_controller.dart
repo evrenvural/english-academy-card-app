@@ -57,4 +57,12 @@ class CardController {
   List<CardModel> getAllCardsFromLocale() {
     return _cardLocaleService.getAllCards();
   }
+
+  Future<bool> setIsCardsSavedToAllCardsByView(bool isSaved) {
+    return _cardLocaleService.setIsCardsSavedToAllCards(isSaved);
+  }
+
+  bool isCardsSavedToAllCardsByView() {
+    return _cardLocaleService.isCardsSavedToAllCards();
+  }
 }
